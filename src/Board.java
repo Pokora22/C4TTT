@@ -1,10 +1,21 @@
 import java.util.Random;
 
 public class Board {
-    //TODO Actually start doing shit
-    //Different commit
+    private int winSpaces, height, width;
+    private char[][] boardArr;
 
-    public void flipCoin(){
+    public Board(int winSpaces, int height, int width){
+        this.winSpaces = winSpaces;
+        this.height = height;
+        this.width = width;
+    }
+
+    public boolean flipCoin(){
+
+        return false;
+    }
+
+    public void drawBoard(){
 
     }
 }
