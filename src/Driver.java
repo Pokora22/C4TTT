@@ -5,7 +5,5 @@ public class Driver {
 
     }
 
-    public void flipCoin(){
 
-    }
 }
