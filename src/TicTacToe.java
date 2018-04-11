@@ -1,21 +1,55 @@
-public class TicTacToe extends Board {
-    private int posPlacerX;
-    private int posPlacerY;
+import java.util.HashMap;
 
-    void tokenPlacer(String input) {
+public class TicTacToe extends Board {
+    private char[] labels;
+
+    public TicTacToe(int winSpaces, int height, int width) {
+        super(winSpaces, height, width);
+
+        boardArr = new char[width][height];
+        buildMapArr();
+        labels = new char[] {'A', 'B', 'C'};
+
+    }
+
+    private void buildMapArr(){
+        for(int h = 0; h < height; h++){
+            for(int w = 0; w < width; w++){
+                boardArr[w][h] = ' ';
+            }
+        }
+    }
+
+
+    public boolean placeToken(String input, char token) {
+        int posPlacerX;
+        int posPlacerY;
+
+        input = input.toUpperCase();
 
         ////// (COLUMN, ROW)
         if(input.contains("A"))
-            this.posPlacerY=0;
-        if(input.contains("B"))
-            this.posPlacerY=1;
-        if(input.contains("C"))
-            this.posPlacerY=2;
+            posPlacerY = 0;
+        else if(input.contains("B"))
+            posPlacerY=1;
+        else if(input.contains("C"))
+            posPlacerY=2;
+        else return false;
+
         if(input.contains("1"))
-            this.posPlacerX=0;
-        if(input.contains("2"))
-            this.posPlacerX=1;
-        if(input.contains("3"))
-            this.posPlacerX=2;
+            posPlacerX=0;
+        else if(input.contains("2"))
+            posPlacerX=1;
+        else if(input.contains("3"))
+            posPlacerX=2;
+        else return false;
+
+
+        if(boardArr[posPlacerX][posPlacerY] == ' ') {
+            boardArr[posPlacerX][posPlacerY] = token;
+            return true;
+        }
+
+        return false;
     }
 }
