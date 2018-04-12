@@ -4,7 +4,8 @@ import java.util.Random;
 public class Board {
     protected int winSpaces, height, width;
     protected char[][] boardArr;
-    private char[] tttLabels = {'A', 'B', 'C'};
+    private final char[] tttLabels = {'A', 'B', 'C'};
+    private final String base32Values = "123456789ABCDEFGHIJKLMNOPQRSTUVW";
 
     public Board(int winSpaces, int height, int width) {
         this.winSpaces = winSpaces;
@@ -18,12 +19,15 @@ public class Board {
     }
 
     public void drawBoard() {
+        convertFromBase32("h");
+
+
         for (int h = 0; h < height; h++) {
 
             if(h == 0){
                 System.out.print("|");
                 for(int w2 = 0; w2 < width; w2++) {
-                    System.out.print("-" + (w2 + 1) + "-|");
+                    System.out.print("-" + (base32Values.charAt(w2) + "-|"));
                 }
 
             }
@@ -43,4 +47,11 @@ public class Board {
             }
         }
     }
+
+    protected int convertFromBase32(String input) {
+        input = input.toUpperCase();
+        System.out.println("The value \""+input+"\" to add to array is: " +base32Values.indexOf(input)); //debug
+        return base32Values.indexOf(input);
+    }
+
 }
