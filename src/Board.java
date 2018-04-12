@@ -11,6 +11,17 @@ public class Board {
         this.winSpaces = winSpaces;
         this.height = height;
         this.width = width;
+
+        boardArr = new char[width][height];
+        buildBoardArr();
+    }
+
+    private void buildBoardArr(){
+        for(int h = 0; h < height; h++){
+            for(int w = 0; w < width; w++){
+                boardArr[w][h] = ' ';
+            }
+        }
     }
 
     public boolean flipCoin() {
@@ -19,9 +30,6 @@ public class Board {
     }
 
     public void drawBoard() {
-        convertFromBase32("h");
-
-
         for (int h = 0; h < height; h++) {
 
             if(h == 0){
@@ -33,7 +41,7 @@ public class Board {
             }
             System.out.println();
             if(width == 3 && height == 3)
-                System.out.print(tttLabels[h] + " ");
+                System.out.print(base32Values.charAt(h+9) + " ");
             else
                 System.out.print("| ");
 
