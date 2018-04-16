@@ -7,8 +7,8 @@ public class Driver {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        TicTacToe tttBoard = new TicTacToe(3, 3, 3);
-        Connect4 c4Board = new Connect4(4, 10, 10);
+        Board tttBoard = new TicTacToe(3, 3, 3);
+        Board c4Board = new Connect4(4, 10, 10);
 
         Player p1 = new Player("Name1", '*');
         Player p2 = new Player("Name 2", '#');

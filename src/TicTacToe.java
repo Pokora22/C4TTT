@@ -34,5 +34,30 @@ public class TicTacToe extends Board {
         }
         else return false;
     }
+
+    public void drawBoard() {
+        for (int h = 0; h < height; h++) {
+
+            if(h == 0){
+                System.out.print("|");
+                for(int w2 = 0; w2 < width; w2++) {
+                    System.out.print("-" + (super.base32Values.charAt(w2) + "-|"));
+                }
+
+            }
+            System.out.println();
+
+            System.out.print(super.base32Values.charAt(h+9) + " ");
+
+            for (int w = 0; w < width; w++) {
+                System.out.print(boardArr[w][h] + " | ");
+            }
+
+            System.out.print("\n|");
+            for(int i = 0; i < width; i++){
+                System.out.print("---|");
+            }
+        }
+    }
 }
 

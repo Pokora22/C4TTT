@@ -24,4 +24,27 @@ public class Connect4 extends Board{
         //Column is full
         return false;
     }
+
+    public void drawBoard() {
+        for (int h = 0; h < height; h++) {
+
+            if (h == 0) {
+                System.out.print("|");
+                for (int w2 = 0; w2 < width; w2++) {
+                    System.out.print("-" + (base32Values.charAt(w2) + "-|"));
+                }
+
+            }
+            System.out.print("\n | ");
+
+            for (int w = 0; w < width; w++) {
+                System.out.print(boardArr[w][h] + " | ");
+            }
+
+            System.out.print("\n|");
+            for (int i = 0; i < width; i++) {
+                System.out.print("---|");
+            }
+        }
+    }
 }
