@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Random;
 
-public class Board {
+public abstract class Board {
     protected int winSpaces, height, width;
     protected char[][] boardArr;
     //private final char[] tttLabels = {'A', 'B', 'C'};
@@ -29,13 +29,11 @@ public class Board {
         return false;
     }
 
-    public void drawBoard() {
-
-    }
+    public abstract void drawBoard();
+    public abstract boolean placeToken(String input, char token);
 
     protected int convertFromBase32(String input) {
         input = input.toUpperCase();
-        System.out.println("The value \""+input+"\" to add to array is: " +base32Values.indexOf(input)); //debug
         return base32Values.indexOf(input);
     }
 

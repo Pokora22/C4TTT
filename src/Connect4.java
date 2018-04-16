@@ -35,7 +35,7 @@ public class Connect4 extends Board{
                 }
 
             }
-            System.out.print("\n | ");
+            System.out.print("\n| ");
 
             for (int w = 0; w < width; w++) {
                 System.out.print(boardArr[w][h] + " | ");

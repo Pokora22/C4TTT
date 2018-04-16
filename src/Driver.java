@@ -19,17 +19,19 @@ public class Driver {
         Players.add(p2);
 
 
-        Player current = Players.get(0);
+        Player currentPlayer = Players.get(0);
+        Board currentBoard = tttBoard;
+
 
         while(true){
-            c4Board.drawBoard();
-            System.out.print("\n"+current.getName() +" ("+current.getToken()+"), place your token: ");
-            if(!c4Board.placeToken(sc.nextLine(), current.getToken()))
+            currentBoard.drawBoard();
+            System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
+            if(!currentBoard.placeToken(sc.nextLine(), currentPlayer.getToken()))
                 continue;
-            if(Players.indexOf(current) == 0)
-                current = Players.get(1);
+            if(Players.indexOf(currentPlayer) == 0)
+                currentPlayer = Players.get(1);
             else
-                current = Players.get(0);
+                currentPlayer = Players.get(0);
         }
     }
 

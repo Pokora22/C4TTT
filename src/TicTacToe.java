@@ -18,16 +18,13 @@ public class TicTacToe extends Board {
             ////// (COLUMN, ROW)
             posPlacerY = convertFromBase32(input.substring(0,1)) - 9; //offset Base32
             posPlacerX = convertFromBase32(input.substring(1,2));
-            System.out.println("First pattern");
         }
         else if (input.matches(patternAlt)){
             posPlacerX = convertFromBase32(input.substring(0,1));
             posPlacerY = convertFromBase32(input.substring(1,2)) - 9;//offset Base32
-            System.out.println("Alt pattern");
         }
         else return false;
 
-        System.out.println("y: " + posPlacerY + " x: " + posPlacerX);
         if(boardArr[posPlacerX][posPlacerY] == ' ') {
             boardArr[posPlacerX][posPlacerY] = token;
             return true;
