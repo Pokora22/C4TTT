@@ -71,4 +71,62 @@ public class Driver {
         out.close();
     }
 
+    private int mainMenu()
+    {
+        System.out.println("Which game do you want to play?");
+        System.out.println("---------");
+        System.out.println("  1) Connect Four");
+        System.out.println("  2) Tic Tac Toe");
+        System.out.println("  0) Exit");
+        System.out.print("==>> ");
+        int option = input.nextInt();
+        return option;
+    }
+
+    private void runMenu()
+    {
+        int option = mainMenu();
+        while (option != 0)
+        {
+
+            switch (option)
+            {
+                case 1:    initializeGame(option);
+                    break;
+                case 2:    initializeGame(option);
+                    break;
+                default:    System.out.println("Invalid option entered: " + option);
+                    break;
+            }
+
+            System.out.println("\nPress any key to continue...");
+            input.nextLine();
+            input.nextLine();
+
+            option = mainMenu();
+        }
+
+        System.out.println("Exiting... bye");
+        System.exit(0);
+    }
+
+    private void initializeGame(int game) {
+        if (game == 1) {
+            int x;
+            int y;
+            System.out.print("Enter Board Width");
+            x = input.nextInt();
+            if(x<4 || x>32) {
+                x = 4;
+            }
+            System.out.print("Enter Board Height");
+            y = input.nextInt();
+            Board c4Board = new Connect4(4, y, x);
+        }
+
+        if (game == 2) {
+            Board tttBoard = new TicTacToe(3, 3, 3);
+        }
+    }
+
 }
