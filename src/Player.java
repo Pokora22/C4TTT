@@ -5,7 +5,7 @@ public class Player {
 	private int matchesPlayed;
 	private int wins;
 	
-	public Player(String name, char token) {
+	public Player(String name, char token, int matchesPlayed, int wins) {
 		if(name.length() <= 30) {
 			this.name = name;
 		}
@@ -13,8 +13,8 @@ public class Player {
 			this.name = name.substring(0, 10);
 		}
 		this.token = token;
-		this.matchesPlayed = 0;
-		this.wins = 0;
+		this.matchesPlayed = matchesPlayed;
+		this.wins = wins;
 	}
 	
 	public double calcWinPer() {
