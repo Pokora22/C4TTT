@@ -50,35 +50,7 @@ public class Driver {
     }
 
 
-    private String listPlayers() {
-        String list = "";
-        if (players.size()!=0) {
-            int index = 0;
-            for (Player player : players) {
-
-                index++;
-            }
-        }
-        //TODO: sort all players in a win% order and list them in a string, could potentially split this into sortPlayers(),listPlayers()
-        return list;
-    }
-
-    @SuppressWarnings("unchecked")
-    public void load() throws Exception {
-        XStream xstream = new XStream(new DomDriver());
-        ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));
-        players = (ArrayList<Player>) is.readObject();
-        is.close();
-    }
-
-    public void save() throws Exception {
-        XStream xstream = new XStream(new DomDriver());
-        ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("players.xml"));
-        out.writeObject(players);
-        out.close();
-    }
-
-    private int mainMenu()
+     private int mainMenu()
     {
         System.out.println("Which game do you want to play?");
         System.out.println("---------");
@@ -134,6 +106,34 @@ public class Driver {
         if (game == 2) {
             Board tttBoard = new TicTacToe(3, 3, 3);
         }
+    }
+
+    private String listPlayers() {
+        String list = "";
+        if (players.size()!=0) {
+            int index = 0;
+            for (Player player : players) {
+
+                index++;
+            }
+        }
+        //TODO: sort all players in a win% order and list them in a string, could potentially split this into sortPlayers(),listPlayers()
+        return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void load() throws Exception {
+        XStream xstream = new XStream(new DomDriver());
+        ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));
+        players = (ArrayList<Player>) is.readObject();
+        is.close();
+    }
+
+    public void save() throws Exception {
+        XStream xstream = new XStream(new DomDriver());
+        ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("players.xml"));
+        out.writeObject(players);
+        out.close();
     }
 
 }
