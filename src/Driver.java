@@ -120,12 +120,22 @@ public class Driver {
         if (players.size()!=0) {
             int index = 0;
             for (Player player : players) {
-
+                double winPer = player.calcWinPer();
+                list = list + index + ": " + player + "Place on the leaderboard: " + locatePlayer(winPer) + "\n";
                 index++;
             }
         }
-        //TODO: sort all players in a win% order and list them in a string, could potentially split this into sortPlayers(),listPlayers()
         return list;
+    }
+    private int locatePlayer(double currPlayer) {
+        int position = 1;
+        for(int i = 0; i < players.size() ; i++) {
+            double nextPlayerWinPer=players.get(i).calcWinPer();
+            if(currPlayer<nextPlayerWinPer) {
+                position++;
+            }
+        }
+        return position;
     }
 
     @SuppressWarnings("unchecked")
