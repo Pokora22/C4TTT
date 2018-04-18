@@ -52,6 +52,13 @@ public class Driver {
 
     private String listPlayers() {
         String list = "";
+        if (players.size()!=0) {
+            int index = 0;
+            for (Player player : players) {
+
+                index++;
+            }
+        }
         //TODO: sort all players in a win% order and list them in a string, could potentially split this into sortPlayers(),listPlayers()
         return list;
     }
