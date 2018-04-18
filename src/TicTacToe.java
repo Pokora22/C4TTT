@@ -15,7 +15,7 @@ public class TicTacToe extends Board {
         int posPlacerY;
 
         if (input.matches(pattern)) {
-            ////// (COLUMN, ROW)
+            ///// (COLUMN, ROW)
             posPlacerY = convertFromBase32(input.substring(0,1)) - 9; //offset Base32
             posPlacerX = convertFromBase32(input.substring(1,2));
         }
