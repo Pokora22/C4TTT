@@ -77,7 +77,9 @@ public class Driver {
 
             switch (option)
             {
-                case 1:    initializeGame(option);
+                case 1:
+                    initializeGame(option);
+                    //discard board code
                     break;
                 case 2:    initializeGame(option);
                     break;
@@ -107,11 +109,25 @@ public class Driver {
             }
             System.out.print("Enter Board Height");
             y = input.nextInt();
-            Board c4Board = new Connect4(4, y, x);
+            Board currentBoard = new Connect4(4, y, x);
         }
 
         if (game == 2) {
-            Board tttBoard = new TicTacToe(3, 3, 3);
+            Board currentBoard = new TicTacToe(3, 3, 3);
+        }
+        initializePlayers();
+        //save players code
+    }
+
+    private void initializePlayers(){
+        //code to create/load players into p1/p2
+        startGame();
+        //nothing
+    }
+
+    public void startGame(currentBoard) {
+        while(!win) {
+            //gameplay takes place here
         }
     }
 
