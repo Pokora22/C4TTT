@@ -61,4 +61,13 @@ public class Player {
 	private double toTwoDecimalPlaces(double num) {
         return (int) (num *100 ) /100.0; 
     }
+
+    public String toString()
+    {
+        return "Name: " + name
+                + ", Token: " + token
+                + ", Matches Played: " + matchesPlayed
+                + ", Wins: " + wins
+                + ", Win Percentage: " + calcWinPer();
+    }
 }

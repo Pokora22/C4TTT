@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 public class Driver {
 
     private ArrayList<Player> players;
+    private Scanner input;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -24,6 +25,7 @@ public class Driver {
         Player p2 = new Player("Name 2", '#');
 
         ArrayList<Player> Players = new ArrayList<Player>();
+        Driver app = new Driver();
 
         Players.add(p1);
         Players.add(p2);
@@ -43,8 +45,13 @@ public class Driver {
             else
                 currentPlayer = Players.get(0);
         }
+
     }
 
+    private void Driver() {
+        input = new Scanner(System.in);
+        runMenu();
+    }
     String inputFromCurrentPlayer() {
         return "Nothing now";
     }
