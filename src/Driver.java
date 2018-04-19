@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+//import com.thoughtworks.xstream.XStream;
+//import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,9 +14,10 @@ public class Driver {
 
     private ArrayList<Player> players;
     private Scanner input;
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+
         Player players;
         Board tttBoard = new TicTacToe(3, 3, 3);
         Board c4Board = new Connect4(4, 10, 10);
@@ -34,7 +35,6 @@ public class Driver {
         Player currentPlayer = Players.get(0);
         Board currentBoard = tttBoard;
 
-
         while(true){
             currentBoard.drawBoard();
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
@@ -45,19 +45,20 @@ public class Driver {
             else
                 currentPlayer = Players.get(0);
         }
-
     }
 
-    private void Driver() {
-        input = new Scanner(System.in);
-        runMenu();
-    }
-    String inputFromCurrentPlayer() {
-        return "Nothing now";
+    private static int readNumber(){
+        while(true){
+            String input = sc.nextLine();
+            if(input.matches("^\\d+$"))
+                return Integer.valueOf(input);
+            else {
+                System.out.println("Wrong input format, try again.");
+            }
+        }
     }
 
-
-     private int mainMenu()
+    private char mainMenu()
     {
         System.out.println("Which game do you want to play?");
         System.out.println("---------");
@@ -65,71 +66,76 @@ public class Driver {
         System.out.println("  2) Tic Tac Toe");
         System.out.println("  0) Exit");
         System.out.print("==>> ");
-        int option = input.nextInt();
+        char option = input.nextLine().charAt(0);
         return option;
     }
 
     private void runMenu()
     {
-        int option = mainMenu();
-        while (option != 0)
+        while (true)
         {
-
-            switch (option)
+            switch (mainMenu())
             {
-                case 1:
-                    initializeGame(option);
+                case '1':
+                    startGame(initializeBoard(1), initializePlayers());
                     //discard board code
                     break;
-                case 2:    initializeGame(option);
+                case '2':
+                    startGame(initializeBoard(2), initializePlayers());
                     break;
-                default:    System.out.println("Invalid option entered: " + option);
+                case '0':
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid option entered.\nPress any key to continue...");
+                    sc.nextLine();
                     break;
             }
-
-            System.out.println("\nPress any key to continue...");
-            input.nextLine();
-            input.nextLine();
-
-            option = mainMenu();
         }
-
-        System.out.println("Exiting... bye");
-        System.exit(0);
     }
 
-    private void initializeGame(int game) {
+
+
+    private Board initializeBoard(int game) {
         if (game == 1) {
-            int x;
-            int y;
-            System.out.print("Enter Board Width");
-            x = input.nextInt();
+            System.out.print("Enter Board Width: ");
+            int x = readNumber();
             if(x<4 || x>32) {
                 x = 4;
             }
-            System.out.print("Enter Board Height");
-            y = input.nextInt();
-            Board currentBoard = new Connect4(4, y, x);
+
+            System.out.print("Enter Board Height: ");
+            int y = readNumber();
+
+            System.out.print("How many tokens in row should win: ");
+            int w = readNumber();
+            if(w < 4 || w > x || w > y)
+                w = 4;
+
+            return new Connect4(w, y, x);
         }
 
-        if (game == 2) {
-            Board currentBoard = new TicTacToe(3, 3, 3);
+        else {
+            return new TicTacToe(3, 3, 3);
         }
-        initializePlayers();
-        //save players code
     }
 
-    private void initializePlayers(){
+    private Player[] initializePlayers(){
+        Player[] currPlayers = new Player[2];
         //code to create/load players into p1/p2
     //    startGame();
         //nothing
+        return currPlayers;
     }
 
-    /*public void startGame(currentBoard) {
+    public void startGame(Board boardToPlay, Player[] currPlayers) {
+
         while(!win) {
             //gameplay takes place here
         }
-    }*/
+
+        //add curr players to the saved scores - update and shit
+    }
 
     private String listPlayers() {
         String list = "";
