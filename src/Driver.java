@@ -121,24 +121,22 @@ public class Driver {
 
     private void initializePlayers(){
         //code to create/load players into p1/p2
-        startGame();
+    //    startGame();
         //nothing
     }
 
-    public void startGame(currentBoard) {
+    /*public void startGame(currentBoard) {
         while(!win) {
             //gameplay takes place here
         }
-    }
+    }*/
 
     private String listPlayers() {
         String list = "";
         if (players.size()!=0) {
-            int index = 0;
             for (Player player : players) {
                 double currPlayerWinPer = player.calcWinPer();
-                list = list + index + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n";
-                index++;
+                list = list + players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n";
             }
         }
         return list;
