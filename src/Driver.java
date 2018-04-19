@@ -136,18 +136,18 @@ public class Driver {
         if (players.size()!=0) {
             int index = 0;
             for (Player player : players) {
-                double winPer = player.calcWinPer();
-                list = list + index + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(winPer) + "\n";
+                double currPlayerWinPer = player.calcWinPer();
+                list = list + index + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n";
                 index++;
             }
         }
         return list;
     }
-    private int locatePlayer(double currPlayer) {
+    private int locatePlayer(double currPlayerWinPer) {
         int position = 1;
         for(int i = 0; i < players.size() ; i++) {
             double nextPlayerWinPer=players.get(i).calcWinPer();
-            if(currPlayer<nextPlayerWinPer) {
+            if(currPlayerWinPer<nextPlayerWinPer) {
                 position++;
             }
         }
