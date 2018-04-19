@@ -48,11 +48,11 @@ public class Driver {
             switch (mainMenu())
             {
                 case '1':
-                    startGame(initializeBoard(1), playerById(initializePlayers().indexOf(0)), playerById(initializePlayers().indexOf(1)));
+                    startGame(initializeBoard(1), initializePlayer(), initializePlayer());
                     //discard board code
                     break;
                 case '2':
-                    startGame(initializeBoard(2), playerById(initializePlayers().indexOf(0)), playerById(initializePlayers().indexOf(1)));
+                    startGame(initializeBoard(2), initializePlayer(), initializePlayer());
                     break;
                 case '0':
                     System.exit(0);
@@ -91,10 +91,8 @@ public class Driver {
         }
     }
 
-    private static ArrayList<Player> initializePlayers(){
-        ArrayList<Player> currPlayers = new ArrayList<Player>(2);
+    private static Player initializePlayer(){
 
-        for(int i = 0; i < 1; i++) {
             //if loading - do stuff
 
             //if creating new
@@ -104,12 +102,11 @@ public class Driver {
                 String name = sc.nextLine();
                 System.out.print("Enter player token: ");
                 char token = sc.nextLine().charAt(0);
-                players.add((new Player(players.size() + 1, name, token)));
-                currPlayers.add(players.get(players.size() - 1));
+                players.add((new Player(players.size(), name, token)));
+                return (players.get(players.size() - 1));
             }
-        }
 
-        return currPlayers;
+            return null;
     }
 
     private static void startGame(Board boardToPlay, Player p1, Player p2) {
@@ -175,5 +172,4 @@ public class Driver {
         out.writeObject(players);
         out.close();
     }
-
 }
