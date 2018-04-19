@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 
 public class Driver {
 
-    private static ArrayList<Player> players;
+    private static ArrayList<Player> players = new ArrayList<Player>();
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -48,11 +48,11 @@ public class Driver {
             switch (mainMenu())
             {
                 case '1':
-                    startGame(initializeBoard(1), initializePlayers());
+                    startGame(initializeBoard(1), playerById(initializePlayers().indexOf(0)), playerById(initializePlayers().indexOf(1)));
                     //discard board code
                     break;
                 case '2':
-                    startGame(initializeBoard(2), initializePlayers());
+                    startGame(initializeBoard(2), playerById(initializePlayers().indexOf(0)), playerById(initializePlayers().indexOf(1)));
                     break;
                 case '0':
                     System.exit(0);
@@ -93,25 +93,37 @@ public class Driver {
 
     private static ArrayList<Player> initializePlayers(){
         ArrayList<Player> currPlayers = new ArrayList<Player>(2);
-        //code to create/load players into p1/p2
-        //nothing
-        currPlayers.add(new Player("Name1", '*',0,0)); // 2 placeholders
-        currPlayers.add(new Player("Name 2", '#',0,0));
+
+        for(int i = 0; i < 1; i++) {
+            //if loading - do stuff
+
+            //if creating new
+            if (true) {
+                //ask all the info for player - \/ are placeholders
+                System.out.print("Enter player name: ");
+                String name = sc.nextLine();
+                System.out.print("Enter player token: ");
+                char token = sc.nextLine().charAt(0);
+                players.add((new Player(players.size() + 1, name, token)));
+                currPlayers.add(players.get(players.size() - 1));
+            }
+        }
+
         return currPlayers;
     }
 
-    private static void startGame(Board boardToPlay, ArrayList<Player> currPlayers) {
-        Player currentPlayer = currPlayers.get(0);
+    private static void startGame(Board boardToPlay, Player p1, Player p2) {
+        Player currentPlayer = p1; //change to coin flip later
 
         while(true) { //switch to !win later
             boardToPlay.drawBoard();
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
             if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
                 continue;
-            if(currPlayers.indexOf(currentPlayer) == 0)
-                currentPlayer = currPlayers.get(1);
+            if(currentPlayer.equals(p1))
+                currentPlayer = p2;
             else
-                currentPlayer = currPlayers.get(0);
+                currentPlayer = p1;
             //gameplay takes place here
         }
 
@@ -138,6 +150,15 @@ public class Driver {
             }
         }
         return position;
+    }
+
+    private static Player playerById(int id){
+        for (Player p : players) {
+            if(p.getId() == id)
+                return p;
+        }
+
+        return null; //no player - check in other place for errors
     }
 
     @SuppressWarnings("unchecked")
