@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-//import com.thoughtworks.xstream.XStream;
-//import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,39 +12,11 @@ import java.io.ObjectOutputStream;
 
 public class Driver {
 
-    private ArrayList<Player> players;
-    private Scanner input;
-    static Scanner sc = new Scanner(System.in);
+    private static ArrayList<Player> players;
+    private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-        Player players;
-        Board tttBoard = new TicTacToe(3, 3, 3);
-        Board c4Board = new Connect4(4, 10, 10);
-
-        Player p1 = new Player("Name1", '*',0,0);
-        Player p2 = new Player("Name 2", '#',0,0);
-
-        ArrayList<Player> Players = new ArrayList<Player>();
-        Driver app = new Driver();
-
-        Players.add(p1);
-        Players.add(p2);
-
-
-        Player currentPlayer = Players.get(0);
-        Board currentBoard = tttBoard;
-
-        while(true){
-            currentBoard.drawBoard();
-            System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
-            if(!currentBoard.placeToken(sc.nextLine(), currentPlayer.getToken()))
-                continue;
-            if(Players.indexOf(currentPlayer) == 0)
-                currentPlayer = Players.get(1);
-            else
-                currentPlayer = Players.get(0);
-        }
+        runMenu();
     }
 
     private static int readNumber(){
@@ -58,7 +30,7 @@ public class Driver {
         }
     }
 
-    private char mainMenu()
+    private static char mainMenu()
     {
         System.out.println("Which game do you want to play?");
         System.out.println("---------");
@@ -66,11 +38,10 @@ public class Driver {
         System.out.println("  2) Tic Tac Toe");
         System.out.println("  0) Exit");
         System.out.print("==>> ");
-        char option = input.nextLine().charAt(0);
-        return option;
+        return sc.nextLine().charAt(0);
     }
 
-    private void runMenu()
+    private static void runMenu()
     {
         while (true)
         {
@@ -96,7 +67,7 @@ public class Driver {
 
 
 
-    private Board initializeBoard(int game) {
+    private static Board initializeBoard(int game) {
         if (game == 1) {
             System.out.print("Enter Board Width: ");
             int x = readNumber();
@@ -120,34 +91,45 @@ public class Driver {
         }
     }
 
-    private Player[] initializePlayers(){
-        Player[] currPlayers = new Player[2];
+    private static ArrayList<Player> initializePlayers(){
+        ArrayList<Player> currPlayers = new ArrayList<Player>(2);
         //code to create/load players into p1/p2
-    //    startGame();
         //nothing
+        currPlayers.add(new Player("Name1", '*',0,0)); // 2 placeholders
+        currPlayers.add(new Player("Name 2", '#',0,0));
         return currPlayers;
     }
 
-    public void startGame(Board boardToPlay, Player[] currPlayers) {
+    private static void startGame(Board boardToPlay, ArrayList<Player> currPlayers) {
+        Player currentPlayer = currPlayers.get(0);
 
-        while(!win) {
+        while(true) { //switch to !win later
+            boardToPlay.drawBoard();
+            System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
+            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
+                continue;
+            if(currPlayers.indexOf(currentPlayer) == 0)
+                currentPlayer = currPlayers.get(1);
+            else
+                currentPlayer = currPlayers.get(0);
             //gameplay takes place here
         }
 
         //add curr players to the saved scores - update and shit
     }
 
-    private String listPlayers() {
-        String list = "";
+    private static StringBuilder listPlayers() {
+        StringBuilder list = new StringBuilder();
+
         if (players.size()!=0) {
             for (Player player : players) {
                 double currPlayerWinPer = player.calcWinPer();
-                list = list + players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n";
+                list.append(players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n");
             }
         }
         return list;
     }
-    private int locatePlayer(double currPlayerWinPer) {
+    private static int locatePlayer(double currPlayerWinPer) {
         int position = 1;
         for(int i = 0; i < players.size() ; i++) {
             double nextPlayerWinPer=players.get(i).calcWinPer();
@@ -159,14 +141,14 @@ public class Driver {
     }
 
     @SuppressWarnings("unchecked")
-    public void load() throws Exception {
+    private static void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));
         players = (ArrayList<Player>) is.readObject();
         is.close();
     }
 
-    public void save() throws Exception {
+    private static void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("players.xml"));
         out.writeObject(players);
