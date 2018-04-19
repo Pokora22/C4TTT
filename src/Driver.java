@@ -21,8 +21,8 @@ public class Driver {
         Board tttBoard = new TicTacToe(3, 3, 3);
         Board c4Board = new Connect4(4, 10, 10);
 
-        Player p1 = new Player("Name1", '*');
-        Player p2 = new Player("Name 2", '#');
+        Player p1 = new Player("Name1", '*',0,0);
+        Player p2 = new Player("Name 2", '#',0,0);
 
         ArrayList<Player> Players = new ArrayList<Player>();
         Driver app = new Driver();
@@ -137,7 +137,7 @@ public class Driver {
             int index = 0;
             for (Player player : players) {
                 double winPer = player.calcWinPer();
-                list = list + index + ": " + player + "Place on the leaderboard: " + locatePlayer(winPer) + "\n";
+                list = list + index + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(winPer) + "\n";
                 index++;
             }
         }
