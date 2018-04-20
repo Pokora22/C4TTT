@@ -4,7 +4,6 @@ import java.util.Random;
 public abstract class Board {
     protected int winSpaces, height, width;
     protected char[][] boardArr;
-    //private final char[] tttLabels = {'A', 'B', 'C'};
     protected final String base32Values = "123456789ABCDEFGHIJKLMNOPQRSTUVW";
 
     public Board(int winSpaces, int height, int width) {
@@ -24,13 +23,49 @@ public abstract class Board {
         }
     }
 
-    public boolean flipCoin() {
+    public abstract void drawBoard();
+    public abstract boolean placeToken(String input, char token);
+
+    public boolean checkWin(Player player){
+        int win = winSpaces;
+
+        //horizontal
+        for(int h = 0; h < height; h++){
+            for(int w = 0; w < width; w++) {
+                if (boardArr[w][h] == player.getToken()) {
+                    win--;
+                }
+                else {
+                    win = winSpaces;
+                }
+                if (win == 0){
+                    return true;
+                }
+            }
+        }
+
+        //vertical
+        for(int w = 0; w < width; w++){
+            for(int h = height - 1; h >= 0; h--) { //check from bottom up to save some calls ?
+                if (boardArr[w][h] == player.getToken()) {
+                    win--;
+                }
+                else {
+                    win = winSpaces;
+                }
+                if (win == 0){
+                    return true;
+                }
+            }
+        }
+
+        //diagonal x2 ?
+        for(int w = 0; w < width; w++){
+
+        }
 
         return false;
     }
-
-    public abstract void drawBoard();
-    public abstract boolean placeToken(String input, char token);
 
     protected int convertFromBase32(String input) {
         input = input.toUpperCase();

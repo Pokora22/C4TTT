@@ -111,18 +111,25 @@ public class Driver {
 
     private static void startGame(Board boardToPlay, Player p1, Player p2) {
         Player currentPlayer = p1; //change to coin flip later
-
-        while(true) { //switch to !win later
+        boolean gameWon = false; //need to initialize for check before switching players
+        while(!gameWon) {
             boardToPlay.drawBoard();
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
-            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
+            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken())) //ask Siobhane about dispatch calls - placeToken seems to get called AFTER checkWin condition (log says token not found)
                 continue;
+
+            if(gameWon = boardToPlay.checkWin(currentPlayer)) {
+                boardToPlay.drawBoard();
+                break;
+            }
+
             if(currentPlayer.equals(p1))
                 currentPlayer = p2;
             else
                 currentPlayer = p1;
             //gameplay takes place here
         }
+        System.out.println("\n" + currentPlayer.getName() + " has won!");
 
         //add curr players to the saved scores - update and shit
     }
