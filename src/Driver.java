@@ -93,7 +93,10 @@ public class Driver {
 
     private static Player initializePlayer(){
         while(true) {
-            System.out.println("Would you like to load/create");//TODO placeholder
+            System.out.println("What would you like to do:");
+            System.out.println("1) Create a new player");
+            System.out.println("2) Load an existing player");
+            System.out.print("==>");
             char option = sc.nextLine().charAt(0);
             switch (option) {
                 case '1':
