@@ -34,34 +34,86 @@ public abstract class Board {
             for(int w = 0; w < width; w++) {
                 if (boardArr[w][h] == player.getToken()) {
                     win--;
+                    if (win == 0){
+                        return true;
+                    }
                 }
                 else {
                     win = winSpaces;
                 }
-                if (win == 0){
-                    return true;
-                }
+
             }
         }
+        win = winSpaces;
 
         //vertical
         for(int w = 0; w < width; w++){
             for(int h = height - 1; h >= 0; h--) { //check from bottom up to save some calls ?
                 if (boardArr[w][h] == player.getToken()) {
                     win--;
+                    if (win == 0){
+                        return true;
+                    }
                 }
                 else {
                     win = winSpaces;
                 }
-                if (win == 0){
-                    return true;
+
+            }
+        }
+        win = winSpaces;
+
+        //diagonal x2 ?
+        for(int h = height - 1; h >= 0; h--){ //CHANGE!!
+
+            int hc = h;
+            for(int w = 0; w < width; w++){
+
+                int wc = w;
+                while(wc < width && hc >= 0){
+                    if(boardArr[wc][hc] == player.getToken()){
+                        win--;
+                        if (win == 0){
+                            return true;
+                        }
+                    }
+                    else{
+                        win = winSpaces;
+                    }
+
+                    wc++;
+                    hc--;
                 }
             }
         }
 
-        //diagonal x2 ?
-        for(int w = 0; w < width; w++){
+        for(int h = 0; h < height; h++){
+            System.out.println("On row " + h);
 
+            for(int w = 0; w < width; w++){
+                int hc = h;
+                System.out.println("In column " + w);
+                int wc = w;
+                while(wc < width && hc < height){
+                    System.out.println("Checking [" +wc + "][" + hc + "]");
+                    if(boardArr[wc][hc] == player.getToken()){
+                        System.out.println(win);
+                        win--;
+                        System.out.println("Token found");
+                        System.out.println(win);
+
+                        if (win == 0){
+                            return true;
+                        }
+                    }
+                    else{
+                        win = winSpaces;
+                    }
+
+                    wc++;
+                    hc++;
+                }
+            }
         }
 
         return false;
