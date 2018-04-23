@@ -93,24 +93,30 @@ public class Driver {
 
     private static Player initializePlayer(){
         while(true) {
-            System.out.println("Would you like to load/create");
+            System.out.println("Would you like to load/create");//TODO placeholder
             char option = sc.nextLine().charAt(0);
             switch (option) {
-                case 1:
+                case '1':
                     System.out.print("Enter player name: ");
                     String name = sc.nextLine();
                     System.out.print("Enter player token: ");
                     char token = sc.nextLine().charAt(0);
                     players.add((new Player(players.size(), name, token)));
                     return (players.get(players.size() - 1));
-                case 2:
-                    //TODO load player
-                    break;
+                case '2':
+                    System.out.println(listPlayers());
+                    if (players.size()>1) {
+                        System.out.println("\nChoose player: ");
+                        return playerById(readNumber());
+                    }
+                    else
+                        System.out.println("There is not enough players to load from list\nPress any key to continue...");
+                        sc.nextLine();
+                        continue;
                 default:
                     continue;
             }
         }
-            //if loading - do stuff
     }
 
     private static void startGame(Board boardToPlay, Player p1, Player p2) {
@@ -119,7 +125,7 @@ public class Driver {
         while(!gameWon) {
             boardToPlay.drawBoard();
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
-            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken())) //ask Siobhane about dispatch calls - placeToken seems to get called AFTER checkWin condition (log says token not found)
+            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
                 continue;
 
             if(gameWon = boardToPlay.checkWin(currentPlayer)) {
@@ -135,29 +141,47 @@ public class Driver {
         }
         System.out.println("\n" + currentPlayer.getName() + " has won!");
 
-        //add curr players to the saved scores - update and shit
+        try {
+            assignLeaderboardPositions();
+            save();
+        }
+        catch (Exception e) {
+            System.out.println("Error saving players, progress is lost");
+        }
     }
 
     private static StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
+        try {
+            load();
+        }
+        catch (Exception e) {
+            System.out.println("error loading beep boop");
+        }
 
         if (players.size()!=0) {
-            for (Player player : players) {
-                double currPlayerWinPer = player.calcWinPer();
-                list.append(players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n");
+            for (int i = 1; i < players.size()+1; i++) {
+                for (Player player : players) {
+                    if (player.getPositionOnLeaderboard()==i) {
+                        list.append(players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + player.getPositionOnLeaderboard() + "\n");
+                    }
+                }
             }
         }
         return list;
     }
-    private static int locatePlayer(double currPlayerWinPer) {
-        int position = 1;
-        for(int i = 0; i < players.size() ; i++) {
-            double nextPlayerWinPer=players.get(i).calcWinPer();
-            if(currPlayerWinPer<nextPlayerWinPer) {
-                position++;
+    private static void assignLeaderboardPositions() {
+        for (Player player : players) {
+            int position = 1;
+            for (Player pToCompare : players) {
+                if (player.calcWinPer() < pToCompare.calcWinPer()) {
+                    player.setPositionOnLeaderboard(++position);
+                }
+                else{
+                    player.setPositionOnLeaderboard(position);
+                }
             }
         }
-        return position;
     }
 
     private static Player playerById(int id){

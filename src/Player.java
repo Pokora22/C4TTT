@@ -5,6 +5,7 @@ public class Player {
 	private int matchesPlayed;
 	private int wins;
 	private int id;
+	private int positionOnLeaderboard;
 	
 	public Player(int id, String name, char token) {
 		if(name.length() <= 30) {
@@ -20,7 +21,12 @@ public class Player {
 	}
 	
 	public double calcWinPer() {
-		return toTwoDecimalPlaces((wins/matchesPlayed)*100);
+		if(matchesPlayed != 0)
+			return toTwoDecimalPlaces(((double)wins/matchesPlayed)*100);
+		else {
+			System.out.println("i'm still here :(");
+			return 0;
+		}
 	}
 	
 	public String getName() {
@@ -42,7 +48,11 @@ public class Player {
 	public int getId(){
 		return id;
 	}
-	
+
+	public int getPositionOnLeaderboard() {
+		return positionOnLeaderboard;
+	}
+
 	public void setName(String name) {
 		if(name.length() <= 10) {
 			this.name = name;
@@ -63,7 +73,10 @@ public class Player {
 	public void setWins(int wins) {
 		this.wins = wins;
 	}
-	
+
+	public void setPositionOnLeaderboard(int positionOnLeaderboard) {
+		this.positionOnLeaderboard = positionOnLeaderboard;
+	}
 	private double toTwoDecimalPlaces(double num) {
         return (int) (num *100 ) /100.0; 
     }
@@ -76,4 +89,8 @@ public class Player {
                 + ", Wins: " + wins
                 + ", Win Percentage: " + calcWinPer();
     }
+
+
+
+
 }

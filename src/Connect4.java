@@ -26,6 +26,7 @@ public class Connect4 extends Board{
     }
 
     public void drawBoard() {
+
         for (int h = 0; h < height; h++) {
 
             if (h == 0) {

@@ -1,0 +1,20 @@
+<object-stream>
+  <list>
+    <Player>
+      <name>Test1</name>
+      <token>#</token>
+      <matchesPlayed>7</matchesPlayed>
+      <wins>3</wins>
+      <id>0</id>
+      <positionOnLeaderboard>2</positionOnLeaderboard>
+    </Player>
+    <Player>
+      <name>Test2</name>
+      <token>3</token>
+      <matchesPlayed>5</matchesPlayed>
+      <wins>4</wins>
+      <id>1</id>
+      <positionOnLeaderboard>1</positionOnLeaderboard>
+    </Player>
+  </list>
+</object-stream>
