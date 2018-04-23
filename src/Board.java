@@ -23,7 +23,7 @@ public abstract class Board {
         }
     }
 
-    public abstract void drawBoard();
+    public abstract StringBuilder drawBoard();
     public abstract boolean placeToken(String input, char token);
 
     public boolean checkWin(Player player){

@@ -96,14 +96,14 @@ public class Driver {
             System.out.println("Would you like to load/create");
             char option = sc.nextLine().charAt(0);
             switch (option) {
-                case 1:
+                case '1':
                     System.out.print("Enter player name: ");
                     String name = sc.nextLine();
                     System.out.print("Enter player token: ");
                     char token = sc.nextLine().charAt(0);
                     players.add((new Player(players.size(), name, token)));
                     return (players.get(players.size() - 1));
-                case 2:
+                case '2':
                     //TODO load player
                     break;
                 default:
@@ -117,13 +117,13 @@ public class Driver {
         Player currentPlayer = p1; //change to coin flip later
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
-            boardToPlay.drawBoard();
+            System.out.println(boardToPlay.drawBoard());
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
             if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken())) //ask Siobhane about dispatch calls - placeToken seems to get called AFTER checkWin condition (log says token not found)
                 continue;
 
             if(gameWon = boardToPlay.checkWin(currentPlayer)) {
-                boardToPlay.drawBoard();
+                System.out.println(boardToPlay.drawBoard());
                 break;
             }
 
