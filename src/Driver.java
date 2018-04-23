@@ -92,20 +92,25 @@ public class Driver {
     }
 
     private static Player initializePlayer(){
-
-            //if loading - do stuff
-
-            //if creating new
-            if (true) {
-                //ask all the info for player - \/ are placeholders
-                System.out.print("Enter player name: ");
-                String name = sc.nextLine();
-                System.out.print("Enter player token: ");
-                char token = sc.nextLine().charAt(0);
-                players.add((new Player(players.size(), name, token)));
-                return (players.get(players.size() - 1));
+        while(true) {
+            System.out.println("Would you like to load/create");
+            char option = sc.nextLine().charAt(0);
+            switch (option) {
+                case 1:
+                    System.out.print("Enter player name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter player token: ");
+                    char token = sc.nextLine().charAt(0);
+                    players.add((new Player(players.size(), name, token)));
+                    return (players.get(players.size() - 1));
+                case 2:
+                    //TODO load player
+                    break;
+                default:
+                    continue;
             }
 
+            //if loading - do stuff
             return null;
     }
 
@@ -134,7 +139,7 @@ public class Driver {
         //add curr players to the saved scores - update and shit
     }
 
-    private static StringBuilder listPlayers() {
+    private static StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
 
         if (players.size()!=0) {
