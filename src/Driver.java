@@ -123,7 +123,7 @@ public class Driver {
         Player currentPlayer = p1; //change to coin flip later
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
-            boardToPlay.drawBoard();
+            System.out.println(boardToPlay.drawBoard());
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
             if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
                 continue;
