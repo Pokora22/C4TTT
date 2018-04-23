@@ -64,11 +64,9 @@ public abstract class Board {
         win = winSpaces;
 
         //diagonal x2 ?
-        for(int h = height - 1; h >= 0; h--){ //CHANGE!!
-
+        for(int h = height - 1; h >= 0; h--){
             int hc = h;
             for(int w = 0; w < width; w++){
-
                 int wc = w;
                 while(wc < width && hc >= 0){
                     if(boardArr[wc][hc] == player.getToken()){
@@ -86,22 +84,16 @@ public abstract class Board {
                 }
             }
         }
+        win = winSpaces;
 
         for(int h = 0; h < height; h++){
-            System.out.println("On row " + h);
-
             for(int w = 0; w < width; w++){
                 int hc = h;
-                System.out.println("In column " + w);
                 int wc = w;
-                while(wc < width && hc < height){
-                    System.out.println("Checking [" +wc + "][" + hc + "]");
-                    if(boardArr[wc][hc] == player.getToken()){
-                        System.out.println(win);
-                        win--;
-                        System.out.println("Token found");
-                        System.out.println(win);
 
+                while(wc < width && hc < height){
+                    if(boardArr[wc][hc] == player.getToken()){
+                        win--;
                         if (win == 0){
                             return true;
                         }
