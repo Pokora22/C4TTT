@@ -109,9 +109,8 @@ public class Driver {
                 default:
                     continue;
             }
-
+        }
             //if loading - do stuff
-            return null;
     }
 
     private static void startGame(Board boardToPlay, Player p1, Player p2) {
