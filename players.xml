@@ -3,16 +3,16 @@
     <Player>
       <name>p1</name>
       <token>1</token>
-      <matchesPlayed>2</matchesPlayed>
-      <wins>1</wins>
+      <matchesPlayed>5</matchesPlayed>
+      <wins>3</wins>
       <id>0</id>
       <positionOnLeaderboard>1</positionOnLeaderboard>
     </Player>
     <Player>
       <name>p2</name>
       <token>2</token>
-      <matchesPlayed>8</matchesPlayed>
-      <wins>0</wins>
+      <matchesPlayed>10</matchesPlayed>
+      <wins>1</wins>
       <id>1</id>
       <positionOnLeaderboard>2</positionOnLeaderboard>
     </Player>

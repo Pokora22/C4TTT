@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Random;
 
 import com.thoughtworks.xstream.XStream;
@@ -11,15 +10,30 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Driver {
-    private static Random random = new Random();
-    private static ArrayList<Player> players = new ArrayList<Player>();
-    private static Scanner sc = new Scanner(System.in);
+    private Random random;
+    private ArrayList<Player> players;
+    private InputOutput io;
 
-    public static void main(String[] args) {
-        runMenu();
+    public Driver(){
+        io = new InputOutput();
+        players = new ArrayList<Player>();
+        random = new Random();
     }
 
-    private static void runMenu()
+    public static void main(String[] args) {
+        Driver driver = new Driver();
+        try {
+            driver.load();
+        } catch (Exception e) {
+            driver.io.outLine("Error: " + e +"\nPlayer file is missing!\nPress any key to exit...");
+            driver.io.readString();
+            System.exit(0);
+        }
+
+        driver.runMenu();
+    }
+
+    private void runMenu()
     {
         while (true)
         {
@@ -36,21 +50,33 @@ public class Driver {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Invalid option entered.\nPress any key to continue...");
-                    sc.nextLine();
+                    io.outLine("Invalid option entered.\nPress any key to continue...");
+                    io.readString();
                     break;
             }
         }
     }
 
-    private static Board initializeBoard(int game) {
+
+    /**
+     * Initializes the board for the game chosen
+     * @param game - integer deciding which game to play (1: Connect 4, other: TicTacToe)
+     * @return object of the game board initialized
+     */
+    private Board initializeBoard(int game) {
         if (game == 1) {
-            System.out.print("Enter Board Width: ");
-            int x = readNumber();
-            System.out.print("Enter Board Height: ");
-            int y = readNumber();
-            System.out.print("How many tokens in row should win: ");
-            int w = readNumber();
+            int x, y, w;
+
+            x = io.readNumber("Enter Board Width (maximum of 32): ",
+                    4, 33,
+                    "Wrong input format or out of bounds, try again.");
+            y = io.readNumber("Enter Board Height: ",
+                    "Wrong input format, try again.");
+
+            w = io.readNumber("How many tokens in row should win (can not be higher than board size): ",
+                    1, x > y ? y+1 : x+1,
+                    "Wrong input format or out of bounds, try again.");
+
             return new Connect4(w, y, x);
         }
 
@@ -59,63 +85,57 @@ public class Driver {
         }
     }
 
-    private static Player initializePlayer(){ //TODO check limits for loading ID
-        while(true) {
-            System.out.println("What would you like to do:");
-            System.out.println("1) Create a new player");
-            System.out.println("2) Load an existing player");
-            switch (getChar("==> ")) {
-                case '1':
-                    System.out.print("Enter player name: ");
-                    String name = sc.nextLine();
 
-                    players.add((new Player(players.size(), name, getChar("Enter player token: "))));
+    private Player initializePlayer(){
+        while(true) {
+            io.out("What would you like to do:\n" +
+                    "1) Create a new player\n" +
+                    "2) Load an existing player\n");
+
+            switch (io.readFirstChar("==> ")) {
+                case '1':
+                    String name = io.readString("Enter player name: ", "Cannot be empty, try again.");
+                    players.add((new Player(players.size(), name, io.readFirstChar("Enter player token: ", "Can't be empty, try again"))));
                     return (players.get(players.size() - 1));
                 case '2':
-                    System.out.println(listPlayers());
+                    io.out(listPlayers().toString());
                     if (players.size() > 0) {
-                        System.out.println("\nChoose player: ");
-                        return playerById(readNumber());
+                        return playerById(io.readNumber("\nChoose player: ", 0, players.size(), "No player with given id."));
                     }
                     else
-                        System.out.println("There is not enough players to load from list\nPress any key to continue...");
-                        sc.nextLine();
+                        io.out("There is not enough players to load from list\nPress any key to continue...");
+                        io.readString();
                         continue;
                 default:
             }
         }
     }
 
-    private static void startGame(Board boardToPlay, Player p1, Player p2) {
+    private void startGame(Board boardToPlay, Player p1, Player p2) {
         char p2TokenStore = p2.getToken();
         if(p1.getToken() == p2.getToken()) {
-            p2.setToken(getChar("Token collision detected,\nPlayer 2, please change your token:  "));
+            p2.setToken(io.readFirstChar("Token collision detected,\nPlayer 2, please change your token:  "));
         }
-
-        Player currentPlayer;
-        if(random.nextInt(2) == 0)
-            currentPlayer = p1;
-        else
-            currentPlayer = p2;
+        Player currentPlayer = random.nextInt(2) == 0 ? p1 : p2;
 
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
-            System.out.println(boardToPlay.drawBoard());
-            System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
+            io.out(boardToPlay.drawBoard().toString() +"\n" +
+                    currentPlayer.getName() + " (" + currentPlayer.getToken()+ "), place your token: ");
 
-            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
+            if(!boardToPlay.placeToken(io.readString(), currentPlayer.getToken()))
                 continue;
 
             if(boardToPlay.checkWin(currentPlayer)) {
-                System.out.print(boardToPlay.drawBoard());
-                System.out.println("\n" + currentPlayer.getName() + " has won!");
+                io.out(boardToPlay.drawBoard().toString() +"\n" +
+                        currentPlayer.getName() + " has won!\n");
                 currentPlayer.setWins(currentPlayer.getWins()+1);
                 break;
             }
 
             if(boardToPlay.boardFull()){
-                System.out.print(boardToPlay.drawBoard());
-                System.out.println("\nGame ended with a draw!");
+                io.out(boardToPlay.drawBoard() + "\n" +
+                        "Game ended with a draw!");
                 break;
             }
 
@@ -126,31 +146,22 @@ public class Driver {
         }
 
         p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
-        p2.setMatchesPlayed(p2.getMatchesPlayed()+1);
-
-
+        if(p2.equals(p1))
+            io.out("Congratulation! You played yourself!");
+        else p2.setMatchesPlayed(p2.getMatchesPlayed() + 1);
 
         try {
             assignLeaderboardPositions();
             p2.setToken(p2TokenStore);
             save();
         }
-
         catch (Exception e) {
-            System.out.println("Error saving players, progress is lost");
+            io.out("Error saving players, progress is lost");
         }
     }
 
-    private static StringBuilder listPlayers(){
+    private StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
-        if(players.size() == 0) {
-            try {
-                load();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-
         if (players.size()!=0) {
             for (int i = 1; i < players.size()+1; i++) {
                 for (Player player : players) {
@@ -162,7 +173,7 @@ public class Driver {
         }
         return list;
     }
-    private static void assignLeaderboardPositions() {
+    private void assignLeaderboardPositions() {
         for (Player player : players) {
             int position = 1;
             for (Player pToCompare : players) {
@@ -176,39 +187,19 @@ public class Driver {
         }
     }
 
-    private static char mainMenu()
+    private char mainMenu()
     {
-        System.out.println("Which game do you want to play?");
-        System.out.println("---------");
-        System.out.println("  1) Connect Four");
-        System.out.println("  2) Tic Tac Toe");
-        System.out.println("  0) Exit");
-        System.out.print("==>> ");
-        return sc.nextLine().charAt(0);
+        io.out("Which game do you want to play?\n" +
+                "---------\n" +
+                "  1) Connect Four\n" +
+                "  2) Tic Tac Toe\n" +
+                "  0) Exit\n");
+        return io.readFirstChar("==>> ");
     }
 
-    private static int readNumber(){
-        while(true){
-            String input = sc.nextLine();
-            if(input.matches("^\\d+$"))
-                return Integer.valueOf(input);
-            else {
-                System.out.println("Wrong input format, try again.");
-            }
-        }
-    }
 
-    private static char getChar(String prompt){
-        String charStr;
-        do {
-            System.out.print(prompt);
-            charStr = sc.nextLine();
-        }while(charStr.equals(""));
 
-        return charStr.charAt(0);
-    }
-
-    private static Player playerById(int id){
+    private Player playerById(int id){
         for (Player p : players) {
             if(p.getId() == id)
                 return p;
@@ -219,14 +210,14 @@ public class Driver {
 
 
     @SuppressWarnings("")
-    private static void load() throws Exception {
+    private void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));
         players = (ArrayList<Player>) is.readObject();
         is.close();
     }
 
-    private static void save() throws Exception {
+    private void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("players.xml"));
         out.writeObject(players);
