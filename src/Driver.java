@@ -59,7 +59,7 @@ public class Driver {
         }
     }
 
-    private static Player initializePlayer(){
+    private static Player initializePlayer(){ //TODO check limits for loading ID
         while(true) {
             System.out.println("What would you like to do:");
             System.out.println("1) Create a new player");
@@ -108,12 +108,14 @@ public class Driver {
 
             if(boardToPlay.checkWin(currentPlayer)) {
                 System.out.print(boardToPlay.drawBoard());
-                currentPlayer.setWins(currentPlayer.getWins()+1);//FIXme this doesn't work :(
+                System.out.println("\n" + currentPlayer.getName() + " has won!");
+                currentPlayer.setWins(currentPlayer.getWins()+1);
                 break;
             }
 
-            if(!boardToPlay.boardFull()){
-                System.out.println("Game ended with a draw!");
+            if(boardToPlay.boardFull()){
+                System.out.print(boardToPlay.drawBoard());
+                System.out.println("\nGame ended with a draw!");
                 break;
             }
 
@@ -126,14 +128,14 @@ public class Driver {
         p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
         p2.setMatchesPlayed(p2.getMatchesPlayed()+1);
 
-        System.out.println("\n" + currentPlayer.getName() + " has won!");
+
 
         try {
             assignLeaderboardPositions();
             p2.setToken(p2TokenStore);
             save();
         }
-        //////////////////////////////////////////
+
         catch (Exception e) {
             System.out.println("Error saving players, progress is lost");
         }
@@ -215,7 +217,8 @@ public class Driver {
         return null; //no player - check in other place for errors
     }
 
-    @SuppressWarnings("unchecked")
+
+    @SuppressWarnings("")
     private static void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));

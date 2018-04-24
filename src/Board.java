@@ -113,7 +113,7 @@ public abstract class Board {
     public boolean boardFull(){
         for(int h = 0; h < height; h++){
             for(int w = 0; w < width; w++) {
-                if (boardArr[w][h] == '\0') {
+                if (boardArr[w][h] == ' ') {
                     return false;
                 }
             }
@@ -127,4 +127,3 @@ public abstract class Board {
     }
 
 }
-//TODO add draw as an option :(
