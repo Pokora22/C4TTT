@@ -1,7 +1,4 @@
-import java.util.HashMap;
-
 public class TicTacToe extends Board {
-    private char[] labels;
 
     public TicTacToe(int winSpaces, int height, int width) {
         super(winSpaces, height, width);
@@ -40,7 +37,7 @@ public class TicTacToe extends Board {
             if(h == 0){
                 board.append("|");
                 for(int w2 = 0; w2 < width; w2++) {
-                    board.append("-" + (super.base32Values.charAt(w2) + "-|"));
+                    board.append("-").append(super.base32Values.charAt(w2)).append("-|");
                 }
 
             }

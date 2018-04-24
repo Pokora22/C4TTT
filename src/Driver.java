@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Random;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -11,7 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Driver {
-
+    private static Random random = new Random();
     private static ArrayList<Player> players = new ArrayList<Player>();
     private static Scanner sc = new Scanner(System.in);
 
@@ -71,18 +71,10 @@ public class Driver {
         if (game == 1) {
             System.out.print("Enter Board Width: ");
             int x = readNumber();
-            if(x<4 || x>32) {
-                x = 4;
-            }
-
             System.out.print("Enter Board Height: ");
             int y = readNumber();
-
             System.out.print("How many tokens in row should win: ");
             int w = readNumber();
-            if(w < 4 || w > x || w > y)
-                w = 4;
-
             return new Connect4(w, y, x);
         }
 
@@ -91,23 +83,27 @@ public class Driver {
         }
     }
 
-    private static Player initializePlayer(){ //TODO same token check
+    private static char getChar(String prompt){
+        String charStr;
+        do {
+            System.out.print(prompt);
+            charStr = sc.nextLine();
+        }while(charStr.equals(""));
+
+        return charStr.charAt(0);
+    }
+
+    private static Player initializePlayer(){
         while(true) {
             System.out.println("What would you like to do:");
             System.out.println("1) Create a new player");
             System.out.println("2) Load an existing player");
-            System.out.print("==>");
-            char option = sc.nextLine().charAt(0);
-            switch (option) {
+            switch (getChar("==> ")) {
                 case '1':
                     System.out.print("Enter player name: ");
                     String name = sc.nextLine();
-                    String tokenStr;
-                    do {
-                        System.out.print("Enter player token: ");
-                        tokenStr = sc.nextLine();
-                    }while(tokenStr.equals(""));
-                    players.add((new Player(players.size(), name, tokenStr.charAt(0))));
+
+                    players.add((new Player(players.size(), name, getChar("Enter player token: "))));
                     return (players.get(players.size() - 1));
                 case '2':
                     System.out.println(listPlayers());
@@ -120,13 +116,22 @@ public class Driver {
                         sc.nextLine();
                         continue;
                 default:
-                    continue;
             }
         }
     }
 
     private static void startGame(Board boardToPlay, Player p1, Player p2) {
-        Player currentPlayer = p1; //change to coin flip later
+        char p2TokenStore = p2.getToken();
+        if(p1.getToken() == p2.getToken()) {
+            p2.setToken(getChar("Token collision detected,\nPlayer 2, please change your token:  "));
+        }
+        Player currentPlayer;
+        if(random.nextInt(2) == 0)
+            currentPlayer = p1;
+        else
+            currentPlayer = p2;
+
+
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
             System.out.println(boardToPlay.drawBoard());
@@ -156,6 +161,7 @@ public class Driver {
             System.out.println(players.get(0) + ", " + players.get(1));
             assignLeaderboardPositions();
             System.out.println(players.get(0) + ", " + players.get(1));
+            p2.setToken(p2TokenStore);
             save();
         }
         catch (Exception e) {
@@ -169,14 +175,14 @@ public class Driver {
             load();
         }
         catch (Exception e) {
-
+            System.out.println(e);
         }
 
         if (players.size()!=0) {
             for (int i = 1; i < players.size()+1; i++) {
                 for (Player player : players) {
                     if (player.getPositionOnLeaderboard()==i) {
-                        list.append(players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + player.getPositionOnLeaderboard() + "\n");
+                        list.append(players.indexOf(player)).append(": ").append(player).append("\nPlace on the leaderboard: ").append(player.getPositionOnLeaderboard()).append("\n");
                     }
                 }
             }

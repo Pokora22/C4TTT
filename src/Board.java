@@ -1,6 +1,3 @@
-import java.util.HashMap;
-import java.util.Random;
-
 public abstract class Board {
     protected int winSpaces, height, width;
     protected char[][] boardArr;
