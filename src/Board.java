@@ -41,7 +41,6 @@ public abstract class Board {
                 else {
                     win = winSpaces;
                 }
-                win = winSpaces;
             }
             win = winSpaces;
         }
@@ -59,7 +58,6 @@ public abstract class Board {
                 else {
                     win = winSpaces;
                 }
-                win = winSpaces;
             }
             win = winSpaces;
         }
