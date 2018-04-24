@@ -3,7 +3,7 @@
     <Player>
       <name>p1</name>
       <token>1</token>
-      <matchesPlayed>1</matchesPlayed>
+      <matchesPlayed>2</matchesPlayed>
       <wins>1</wins>
       <id>0</id>
       <positionOnLeaderboard>1</positionOnLeaderboard>
@@ -11,7 +11,7 @@
     <Player>
       <name>p2</name>
       <token>2</token>
-      <matchesPlayed>3</matchesPlayed>
+      <matchesPlayed>8</matchesPlayed>
       <wins>0</wins>
       <id>1</id>
       <positionOnLeaderboard>2</positionOnLeaderboard>

@@ -91,7 +91,7 @@ public class Driver {
         }
     }
 
-    private static Player initializePlayer(){
+    private static Player initializePlayer(){ //TODO same token check
         while(true) {
             System.out.println("What would you like to do:");
             System.out.println("1) Create a new player");
@@ -146,12 +146,16 @@ public class Driver {
             //gameplay takes place here
         }
         p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
+        System.out.println(p1.getMatchesPlayed());
         p2.setMatchesPlayed(p2.getMatchesPlayed()+1);
+        System.out.println(p2.getMatchesPlayed());
         System.out.println("\n" + currentPlayer.getName() + " has won!");
 
         try {
-            currentPlayer.setWins(currentPlayer.getWins()+1);
+            currentPlayer.setWins(currentPlayer.getWins()+1);//FIXme this doesn't work :(
+            System.out.println(players.get(0) + ", " + players.get(1));
             assignLeaderboardPositions();
+            System.out.println(players.get(0) + ", " + players.get(1));
             save();
         }
         catch (Exception e) {

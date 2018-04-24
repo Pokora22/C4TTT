@@ -120,3 +120,4 @@ public abstract class Board {
     }
 
 }
+//TODO add draw as an option :(

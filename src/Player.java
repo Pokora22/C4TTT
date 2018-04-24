@@ -66,6 +66,7 @@ public class Player {
 	}
 
 	public void setMatchesPlayed(int matchesPlayed) {
+		System.out.println("Matches played should become " + matchesPlayed);
 		this.matchesPlayed = matchesPlayed;
 	}
 	
