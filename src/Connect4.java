@@ -13,7 +13,9 @@ public class Connect4 extends Board{
             posPlacerX = convertFromBase32(input);
         }
         else return false;
-
+        if (posPlacerX>=width) {
+            return false;
+        }
         for(int y = height - 1; y >= 0; y--){
             if (boardArr[posPlacerX][y] == ' ') {
                 boardArr[posPlacerX][y] = token;

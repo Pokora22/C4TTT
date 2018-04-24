@@ -24,7 +24,6 @@ public class Player {
 		if(matchesPlayed != 0)
 			return toTwoDecimalPlaces(((double)wins/matchesPlayed)*100);
 		else {
-			System.out.println("i'm still here :(");
 			return 0;
 		}
 	}

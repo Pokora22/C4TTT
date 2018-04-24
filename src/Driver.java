@@ -102,9 +102,12 @@ public class Driver {
                 case '1':
                     System.out.print("Enter player name: ");
                     String name = sc.nextLine();
-                    System.out.print("Enter player token: ");
-                    char token = sc.nextLine().charAt(0);
-                    players.add((new Player(players.size(), name, token)));
+                    String tokenStr;
+                    do {
+                        System.out.print("Enter player token: ");
+                        tokenStr = sc.nextLine();
+                    }while(tokenStr.equals(""));
+                    players.add((new Player(players.size(), name, tokenStr.charAt(0))));
                     return (players.get(players.size() - 1));
                 case '2':
                     System.out.println(listPlayers());
@@ -142,9 +145,12 @@ public class Driver {
                 currentPlayer = p1;
             //gameplay takes place here
         }
+        p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
+        p2.setMatchesPlayed(p2.getMatchesPlayed()+1);
         System.out.println("\n" + currentPlayer.getName() + " has won!");
 
         try {
+            currentPlayer.setWins(currentPlayer.getWins()+1);
             assignLeaderboardPositions();
             save();
         }
@@ -159,7 +165,7 @@ public class Driver {
             load();
         }
         catch (Exception e) {
-            System.out.println("error loading beep boop");
+
         }
 
         if (players.size()!=0) {
