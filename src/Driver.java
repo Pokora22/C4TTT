@@ -19,28 +19,6 @@ public class Driver {
         runMenu();
     }
 
-    private static int readNumber(){
-        while(true){
-            String input = sc.nextLine();
-            if(input.matches("^\\d+$"))
-                return Integer.valueOf(input);
-            else {
-                System.out.println("Wrong input format, try again.");
-            }
-        }
-    }
-
-    private static char mainMenu()
-    {
-        System.out.println("Which game do you want to play?");
-        System.out.println("---------");
-        System.out.println("  1) Connect Four");
-        System.out.println("  2) Tic Tac Toe");
-        System.out.println("  0) Exit");
-        System.out.print("==>> ");
-        return sc.nextLine().charAt(0);
-    }
-
     private static void runMenu()
     {
         while (true)
@@ -65,8 +43,6 @@ public class Driver {
         }
     }
 
-
-
     private static Board initializeBoard(int game) {
         if (game == 1) {
             System.out.print("Enter Board Width: ");
@@ -83,16 +59,6 @@ public class Driver {
         }
     }
 
-    private static char getChar(String prompt){
-        String charStr;
-        do {
-            System.out.print(prompt);
-            charStr = sc.nextLine();
-        }while(charStr.equals(""));
-
-        return charStr.charAt(0);
-    }
-
     private static Player initializePlayer(){
         while(true) {
             System.out.println("What would you like to do:");
@@ -107,7 +73,7 @@ public class Driver {
                     return (players.get(players.size() - 1));
                 case '2':
                     System.out.println(listPlayers());
-                    if (players.size()>1) {
+                    if (players.size() > 0) {
                         System.out.println("\nChoose player: ");
                         return playerById(readNumber());
                     }
@@ -125,22 +91,29 @@ public class Driver {
         if(p1.getToken() == p2.getToken()) {
             p2.setToken(getChar("Token collision detected,\nPlayer 2, please change your token:  "));
         }
+
         Player currentPlayer;
         if(random.nextInt(2) == 0)
             currentPlayer = p1;
         else
             currentPlayer = p2;
 
-
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
             System.out.println(boardToPlay.drawBoard());
             System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
+
             if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken()))
                 continue;
 
-            if(gameWon = boardToPlay.checkWin(currentPlayer)) {
+            if(boardToPlay.checkWin(currentPlayer)) {
                 System.out.print(boardToPlay.drawBoard());
+                currentPlayer.setWins(currentPlayer.getWins()+1);//FIXme this doesn't work :(
+                break;
+            }
+
+            if(!boardToPlay.boardFull()){
+                System.out.println("Game ended with a draw!");
                 break;
             }
 
@@ -148,22 +121,19 @@ public class Driver {
                 currentPlayer = p2;
             else
                 currentPlayer = p1;
-            //gameplay takes place here
         }
+
         p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
-        System.out.println(p1.getMatchesPlayed());
         p2.setMatchesPlayed(p2.getMatchesPlayed()+1);
-        System.out.println(p2.getMatchesPlayed());
+
         System.out.println("\n" + currentPlayer.getName() + " has won!");
 
         try {
-            currentPlayer.setWins(currentPlayer.getWins()+1);//FIXme this doesn't work :(
-            System.out.println(players.get(0) + ", " + players.get(1));
             assignLeaderboardPositions();
-            System.out.println(players.get(0) + ", " + players.get(1));
             p2.setToken(p2TokenStore);
             save();
         }
+        //////////////////////////////////////////
         catch (Exception e) {
             System.out.println("Error saving players, progress is lost");
         }
@@ -171,11 +141,12 @@ public class Driver {
 
     private static StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
-        try {
-            load();
-        }
-        catch (Exception e) {
-            System.out.println(e);
+        if(players.size() == 0) {
+            try {
+                load();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
         if (players.size()!=0) {
@@ -201,6 +172,38 @@ public class Driver {
                 }
             }
         }
+    }
+
+    private static char mainMenu()
+    {
+        System.out.println("Which game do you want to play?");
+        System.out.println("---------");
+        System.out.println("  1) Connect Four");
+        System.out.println("  2) Tic Tac Toe");
+        System.out.println("  0) Exit");
+        System.out.print("==>> ");
+        return sc.nextLine().charAt(0);
+    }
+
+    private static int readNumber(){
+        while(true){
+            String input = sc.nextLine();
+            if(input.matches("^\\d+$"))
+                return Integer.valueOf(input);
+            else {
+                System.out.println("Wrong input format, try again.");
+            }
+        }
+    }
+
+    private static char getChar(String prompt){
+        String charStr;
+        do {
+            System.out.print(prompt);
+            charStr = sc.nextLine();
+        }while(charStr.equals(""));
+
+        return charStr.charAt(0);
     }
 
     private static Player playerById(int id){

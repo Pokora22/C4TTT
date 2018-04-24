@@ -90,7 +90,7 @@ public class Player {
                 + ", Win Percentage: " + calcWinPer();
     }
 
-
-
-
+    public boolean equals(Player p){
+        return (this.getId() == p.getId());
+    }
 }

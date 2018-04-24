@@ -107,8 +107,18 @@ public abstract class Board {
             }
             win = winSpaces;
         }
-
         return false;
+    }
+
+    public boolean boardFull(){
+        for(int h = 0; h < height; h++){
+            for(int w = 0; w < width; w++) {
+                if (boardArr[w][h] == '\0') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     protected int convertFromBase32(String input) {
