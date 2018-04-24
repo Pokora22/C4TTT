@@ -41,14 +41,15 @@ public abstract class Board {
                 else {
                     win = winSpaces;
                 }
-
+                win = winSpaces;
             }
+            win = winSpaces;
         }
-        win = winSpaces;
+
 
         //vertical
         for(int w = 0; w < width; w++){
-            for(int h = height - 1; h >= 0; h--) { //check from bottom up to save some calls ?
+            for(int h = 0; h < height; h++) {
                 if (boardArr[w][h] == player.getToken()) {
                     win--;
                     if (win == 0){
@@ -58,10 +59,11 @@ public abstract class Board {
                 else {
                     win = winSpaces;
                 }
-
+                win = winSpaces;
             }
+            win = winSpaces;
         }
-        win = winSpaces;
+
 
         //diagonal x2 ?
         for(int h = height - 1; h >= 0; h--){
@@ -82,9 +84,10 @@ public abstract class Board {
                     wc++;
                     hc--;
                 }
+                win = winSpaces;
             }
+            win = winSpaces;
         }
-        win = winSpaces;
 
         for(int h = 0; h < height; h++){
             for(int w = 0; w < width; w++){
@@ -105,7 +108,9 @@ public abstract class Board {
                     wc++;
                     hc++;
                 }
+                win = winSpaces;
             }
+            win = winSpaces;
         }
 
         return false;

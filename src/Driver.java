@@ -135,7 +135,7 @@ public class Driver {
                 continue;
 
             if(gameWon = boardToPlay.checkWin(currentPlayer)) {
-                boardToPlay.drawBoard();
+                System.out.print(boardToPlay.drawBoard());
                 break;
             }
 
