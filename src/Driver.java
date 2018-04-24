@@ -24,10 +24,16 @@ public class Driver {
         Driver driver = new Driver();
         try {
             driver.load();
-        } catch (Exception e) {
-            driver.io.outLine("Error: " + e +"\nPlayer file is missing!\nPress any key to exit...");
-            driver.io.readString();
-            System.exit(0);
+        } catch (Exception er) {
+            try{
+                driver.io.outLine("Error: " + er +"\nPlayer file is missing!\nCreating new one...");
+                driver.save();
+            }
+            catch (Exception ew){
+                driver.io.outLine("Error: " + ew +"\nCould not create players files!\nPress any key to exit...");
+                driver.io.readString();
+                System.exit(0);
+            }
         }
 
         driver.runMenu();
