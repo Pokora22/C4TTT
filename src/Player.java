@@ -82,7 +82,8 @@ public class Player {
 
     public String toString()
     {
-        return "Name: " + name
+        return  "ID: " + id
+				+ ", Name: " + name
                 + ", Token: " + token
                 + ", Matches Played: " + matchesPlayed
                 + ", Wins: " + wins

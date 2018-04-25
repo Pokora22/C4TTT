@@ -119,7 +119,7 @@ public class Driver {
 
     private void startGame(Board boardToPlay, Player p1, Player p2) {
         char p2TokenStore = p2.getToken();
-        if(p1.getToken() == p2.getToken()) {
+        if(p1.getToken() == p2.getToken() && !p1.equals(p2)) {
             p2.setToken(io.readFirstChar("Token collision detected,\nPlayer 2, please change your token:  "));
         }
         Player currentPlayer = random.nextInt(2) == 0 ? p1 : p2;
@@ -153,7 +153,8 @@ public class Driver {
 
         p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
         if(p2.equals(p1))
-            io.out("Congratulation! You played yourself!");
+            io.outLine("Congratulation! You played yourself!\n" +
+                    "----------");
         else p2.setMatchesPlayed(p2.getMatchesPlayed() + 1);
 
         try {
@@ -168,6 +169,8 @@ public class Driver {
 
     private StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
+        if (players.size() == 1)
+            return list.append(players.get(0)); //Allow for player to load when there's only 1 player in list
         if (players.size()!=0) {
             for (int i = 1; i < players.size()+1; i++) {
                 for (Player player : players) {
