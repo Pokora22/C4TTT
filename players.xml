@@ -8,5 +8,13 @@
       <id>0</id>
       <positionOnLeaderboard>1</positionOnLeaderboard>
     </Player>
+    <Player>
+      <name>P2</name>
+      <token>2</token>
+      <matchesPlayed>1</matchesPlayed>
+      <wins>1</wins>
+      <id>1</id>
+      <positionOnLeaderboard>1</positionOnLeaderboard>
+    </Player>
   </list>
 </object-stream>

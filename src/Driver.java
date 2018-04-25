@@ -106,7 +106,12 @@ public class Driver {
                 case '2':
                     io.out(listPlayers().toString());
                     if (players.size() > 0) {
-                        return playerById(io.readNumber("\nChoose player: ", 0, players.size(), "No player with given id."));
+                        int choice = io.readNumber("\nChoose player id, or select -1 to go back: ", -1, players.size(), "No player with given id.");
+                        if (choice == -1){
+                            io.outLine("----------");
+                            break;
+                        }
+                        return playerById(choice);
                     }
                     else
                         io.out("There is not enough players to load from list\nPress any key to continue...");
@@ -169,13 +174,14 @@ public class Driver {
 
     private StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
+        assignLeaderboardPositions();
         if (players.size() == 1)
             return list.append(players.get(0)); //Allow for player to load when there's only 1 player in list
         if (players.size()!=0) {
             for (int i = 1; i < players.size()+1; i++) {
                 for (Player player : players) {
                     if (player.getPositionOnLeaderboard()==i) {
-                        list.append(players.indexOf(player)).append(": ").append(player).append("\nPlace on the leaderboard: ").append(player.getPositionOnLeaderboard()).append("\n");
+                        list.append(players.indexOf(player)).append(": ").append(player).append("\n");
                     }
                 }
             }

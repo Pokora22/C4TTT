@@ -18,6 +18,7 @@ public class Player {
 		this.matchesPlayed = 0;
 		this.wins = 0;
 		this.id = id;
+		this.positionOnLeaderboard = 1;
 	}
 	
 	public double calcWinPer() {
@@ -87,7 +88,8 @@ public class Player {
                 + ", Token: " + token
                 + ", Matches Played: " + matchesPlayed
                 + ", Wins: " + wins
-                + ", Win Percentage: " + calcWinPer();
+                + ", Win Percentage: " + calcWinPer()
+				+ "\nPlace on the leaderboard: " + positionOnLeaderboard;
     }
 
     public boolean equals(Player p){

@@ -17,7 +17,7 @@ public class InputOutput {
     public int readNumber(){
         while(true){
             String input = sc.nextLine();
-            if(input.matches("^\\d+$"))
+            if(input.matches("^-*\\d+$"))
                 return Integer.valueOf(input);
         }
     }
@@ -32,7 +32,7 @@ public class InputOutput {
             System.out.print(prompt);
             String input = sc.nextLine();
 
-            if(input.matches("^\\d+$"))
+            if(input.matches("^-*\\d+$"))
                 return Integer.valueOf(input);
             else System.out.println(errorMsg);
         }
@@ -47,7 +47,7 @@ public class InputOutput {
     public int readNumber(int lowerLimit, int upperLimit, String errorMsg){
         while(true){
             String input = sc.nextLine();
-            if(input.matches("^\\d+$") && Integer.valueOf(input) >= lowerLimit && Integer.valueOf(input) < upperLimit)
+            if(input.matches("^-*\\d+$") && Integer.valueOf(input) >= lowerLimit && Integer.valueOf(input) < upperLimit)
                 return Integer.valueOf(input);
             else System.out.println(errorMsg);
         }
@@ -58,7 +58,7 @@ public class InputOutput {
         while(true){
             System.out.print(prompt);
             String input = sc.nextLine();
-            if(input.matches("^\\d+$") && Integer.valueOf(input) >= lowerLimit && Integer.valueOf(input) < upperLimit)
+            if(input.matches("^-*\\d+$") && Integer.valueOf(input) >= lowerLimit && Integer.valueOf(input) < upperLimit)
                 return Integer.valueOf(input);
             else System.out.println(errorMsg);
         }
