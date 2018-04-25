@@ -74,7 +74,7 @@ public class InputOutput {
         while (true){
             System.out.print(prompt);
             charStr = sc.nextLine();
-            if (!charStr.equals("") || charStr.charAt(0) != ' ')
+            if (!charStr.equals("") && charStr.charAt(0) != ' ')
                 return charStr.charAt(0);
         }
     }
