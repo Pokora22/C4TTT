@@ -5,6 +5,7 @@ public class Player {
 	private int matchesPlayed;
 	private int wins;
 	private int id;
+	private int positionOnLeaderboard;
 	
 	public Player(int id, String name, char token) {
 		if(name.length() <= 30) {
@@ -17,10 +18,15 @@ public class Player {
 		this.matchesPlayed = 0;
 		this.wins = 0;
 		this.id = id;
+		this.positionOnLeaderboard = 1;
 	}
 	
 	public double calcWinPer() {
-		return toTwoDecimalPlaces((wins/matchesPlayed)*100);
+		if(matchesPlayed != 0)
+			return toTwoDecimalPlaces(((double)wins/matchesPlayed)*100);
+		else {
+			return 0;
+		}
 	}
 	
 	public String getName() {
@@ -42,7 +48,11 @@ public class Player {
 	public int getId(){
 		return id;
 	}
-	
+
+	public int getPositionOnLeaderboard() {
+		return positionOnLeaderboard;
+	}
+
 	public void setName(String name) {
 		if(name.length() <= 10) {
 			this.name = name;
@@ -63,17 +73,26 @@ public class Player {
 	public void setWins(int wins) {
 		this.wins = wins;
 	}
-	
+
+	public void setPositionOnLeaderboard(int positionOnLeaderboard) {
+		this.positionOnLeaderboard = positionOnLeaderboard;
+	}
 	private double toTwoDecimalPlaces(double num) {
         return (int) (num *100 ) /100.0; 
     }
 
     public String toString()
     {
-        return "Name: " + name
+        return  "ID: " + id
+				+ ", Name: " + name
                 + ", Token: " + token
                 + ", Matches Played: " + matchesPlayed
                 + ", Wins: " + wins
-                + ", Win Percentage: " + calcWinPer();
+                + ", Win Percentage: " + calcWinPer()
+				+ "\nPlace on the leaderboard: " + positionOnLeaderboard;
+    }
+
+    public boolean equals(Player p){
+        return (this.getId() == p.getId());
     }
 }

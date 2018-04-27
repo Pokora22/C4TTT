@@ -1,6 +1,5 @@
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.Random;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -11,37 +10,36 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Driver {
+    private Random random;
+    private ArrayList<Player> players;
+    private InputOutput io;
 
-    private static ArrayList<Player> players = new ArrayList<Player>();
-    private static Scanner sc = new Scanner(System.in);
+    public Driver(){
+        io = new InputOutput();
+        players = new ArrayList<Player>();
+        random = new Random();
+    }
 
     public static void main(String[] args) {
-        runMenu();
-    }
-
-    private static int readNumber(){
-        while(true){
-            String input = sc.nextLine();
-            if(input.matches("^\\d+$"))
-                return Integer.valueOf(input);
-            else {
-                System.out.println("Wrong input format, try again.");
+        Driver driver = new Driver();
+        try {
+            driver.load();
+        } catch (Exception er) {
+            try{
+                driver.io.outLine("Error: " + er +"\nPlayer file is missing!\nCreating new one...");
+                driver.save();
+            }
+            catch (Exception ew){
+                driver.io.outLine("Error: " + ew +"\nCould not create players files!\nPress any key to exit...");
+                driver.io.readString();
+                System.exit(0);
             }
         }
+
+        driver.runMenu();
     }
 
-    private static char mainMenu()
-    {
-        System.out.println("Which game do you want to play?");
-        System.out.println("---------");
-        System.out.println("  1) Connect Four");
-        System.out.println("  2) Tic Tac Toe");
-        System.out.println("  0) Exit");
-        System.out.print("==>> ");
-        return sc.nextLine().charAt(0);
-    }
-
-    private static void runMenu()
+    private void runMenu()
     {
         while (true)
         {
@@ -58,30 +56,32 @@ public class Driver {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Invalid option entered.\nPress any key to continue...");
-                    sc.nextLine();
+                    io.outLine("Invalid option entered.\nPress any key to continue...");
+                    io.readString();
                     break;
             }
         }
     }
 
 
-
-    private static Board initializeBoard(int game) {
+    /**
+     * Initializes the board for the game chosen
+     * @param game - integer deciding which game to play (1: Connect 4, other: TicTacToe)
+     * @return object of the game board initialized
+     */
+    private Board initializeBoard(int game) {
         if (game == 1) {
-            System.out.print("Enter Board Width: ");
-            int x = readNumber();
-            if(x<4 || x>32) {
-                x = 4;
-            }
+            int x, y, w;
 
-            System.out.print("Enter Board Height: ");
-            int y = readNumber();
+            x = io.readNumber("Enter Board Width (maximum of 32): ",
+                    4, 33,
+                    "Wrong input format or out of bounds, try again.");
+            y = io.readNumber("Enter Board Height: ",
+                    "Wrong input format, try again.");
 
-            System.out.print("How many tokens in row should win: ");
-            int w = readNumber();
-            if(w < 4 || w > x || w > y)
-                w = 4;
+            w = io.readNumber("How many tokens in row should win (can not be higher than board size): ",
+                    1, x > y ? y+1 : x+1,
+                    "Wrong input format or out of bounds, try again.");
 
             return new Connect4(w, y, x);
         }
@@ -91,35 +91,62 @@ public class Driver {
         }
     }
 
-    private static Player initializePlayer(){
 
-            //if loading - do stuff
+    private Player initializePlayer(){
+        while(true) {
+            io.out("What would you like to do:\n" +
+                    "1) Create a new player\n" +
+                    "2) Load an existing player\n");
 
-            //if creating new
-            if (true) {
-                //ask all the info for player - \/ are placeholders
-                System.out.print("Enter player name: ");
-                String name = sc.nextLine();
-                System.out.print("Enter player token: ");
-                char token = sc.nextLine().charAt(0);
-                players.add((new Player(players.size(), name, token)));
-                return (players.get(players.size() - 1));
+            switch (io.readFirstChar("==> ")) {
+                case '1':
+                    String name = io.readString("Enter player name: ", "Cannot be empty, try again.");
+                    players.add((new Player(players.size(), name, io.readFirstChar("Enter player token: ", "Can't be empty, try again"))));
+                    return (players.get(players.size() - 1));
+                case '2':
+                    io.out(listPlayers().toString());
+                    if (players.size() > 0) {
+                        int choice = io.readNumber("\nChoose player id, or select -1 to go back: ", -1, players.size(), "No player with given id.");
+                        if (choice == -1){
+                            io.outLine("----------");
+                            break;
+                        }
+                        return playerById(choice);
+                    }
+                    else
+                        io.out("There is not enough players to load from list\nPress any key to continue...");
+                        io.readString();
+                        continue;
+                default:
             }
-
-            return null;
+        }
     }
 
-    private static void startGame(Board boardToPlay, Player p1, Player p2) {
-        Player currentPlayer = p1; //change to coin flip later
+    private void startGame(Board boardToPlay, Player p1, Player p2) {
+        char p2TokenStore = p2.getToken();
+        if(p1.getToken() == p2.getToken() && !p1.equals(p2)) {
+            p2.setToken(io.readFirstChar("Token collision detected,\nPlayer 2, please change your token:  "));
+        }
+        Player currentPlayer = random.nextInt(2) == 0 ? p1 : p2;
+
         boolean gameWon = false; //need to initialize for check before switching players
         while(!gameWon) {
-            boardToPlay.drawBoard();
-            System.out.print("\n"+currentPlayer.getName() +" ("+currentPlayer.getToken()+"), place your token: ");
-            if(!boardToPlay.placeToken(sc.nextLine(), currentPlayer.getToken())) //ask Siobhane about dispatch calls - placeToken seems to get called AFTER checkWin condition (log says token not found)
+            io.out(boardToPlay.drawBoard().toString() +"\n" +
+                    currentPlayer.getName() + " (" + currentPlayer.getToken()+ "), place your token: ");
+
+            if(!boardToPlay.placeToken(io.readString(), currentPlayer.getToken()))
                 continue;
 
-            if(gameWon = boardToPlay.checkWin(currentPlayer)) {
-                boardToPlay.drawBoard();
+            if(boardToPlay.checkWin(currentPlayer)) {
+                io.out(boardToPlay.drawBoard().toString() +"\n" +
+                        currentPlayer.getName() + " has won!\n");
+                currentPlayer.setWins(currentPlayer.getWins()+1);
+                break;
+            }
+
+            if(boardToPlay.boardFull()){
+                io.out(boardToPlay.drawBoard() + "\n" +
+                        "Game ended with a draw!");
                 break;
             }
 
@@ -127,36 +154,67 @@ public class Driver {
                 currentPlayer = p2;
             else
                 currentPlayer = p1;
-            //gameplay takes place here
         }
-        System.out.println("\n" + currentPlayer.getName() + " has won!");
 
-        //add curr players to the saved scores - update and shit
+        p1.setMatchesPlayed(p1.getMatchesPlayed()+1);
+        if(p2.equals(p1))
+            io.outLine("Congratulation! You played yourself!\n" +
+                    "----------");
+        else p2.setMatchesPlayed(p2.getMatchesPlayed() + 1);
+
+        try {
+            assignLeaderboardPositions();
+            p2.setToken(p2TokenStore);
+            save();
+        }
+        catch (Exception e) {
+            io.out("Error saving players, progress is lost");
+        }
     }
 
-    private static StringBuilder listPlayers() {
+    private StringBuilder listPlayers(){
         StringBuilder list = new StringBuilder();
-
+        assignLeaderboardPositions();
+        if (players.size() == 1)
+            return list.append(players.get(0)); //Allow for player to load when there's only 1 player in list
         if (players.size()!=0) {
-            for (Player player : players) {
-                double currPlayerWinPer = player.calcWinPer();
-                list.append(players.indexOf(player) + ": " + player + "\nPlace on the leaderboard: " + locatePlayer(currPlayerWinPer) + "\n");
+            for (int i = 1; i < players.size()+1; i++) {
+                for (Player player : players) {
+                    if (player.getPositionOnLeaderboard()==i) {
+                        list.append(players.indexOf(player)).append(": ").append(player).append("\n");
+                    }
+                }
             }
         }
         return list;
     }
-    private static int locatePlayer(double currPlayerWinPer) {
-        int position = 1;
-        for(int i = 0; i < players.size() ; i++) {
-            double nextPlayerWinPer=players.get(i).calcWinPer();
-            if(currPlayerWinPer<nextPlayerWinPer) {
-                position++;
+    private void assignLeaderboardPositions() {
+        for (Player player : players) {
+            int position = 1;
+            for (Player pToCompare : players) {
+                if (player.calcWinPer() < pToCompare.calcWinPer()) {
+                    player.setPositionOnLeaderboard(++position);
+                }
+                else{
+                    player.setPositionOnLeaderboard(position);
+                }
             }
         }
-        return position;
     }
 
-    private static Player playerById(int id){
+    private char mainMenu()
+    {
+        io.out("Which game do you want to play?\n" +
+                "---------\n" +
+                "  1) Connect Four\n" +
+                "  2) Tic Tac Toe\n" +
+                "  0) Exit\n");
+        return io.readFirstChar("==>> ");
+    }
+
+
+
+    private Player playerById(int id){
         for (Player p : players) {
             if(p.getId() == id)
                 return p;
@@ -165,15 +223,16 @@ public class Driver {
         return null; //no player - check in other place for errors
     }
 
-    @SuppressWarnings("unchecked")
-    private static void load() throws Exception {
+
+    @SuppressWarnings("")
+    private void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("players.xml"));
         players = (ArrayList<Player>) is.readObject();
         is.close();
     }
 
-    private static void save() throws Exception {
+    private void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("players.xml"));
         out.writeObject(players);
